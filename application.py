@@ -88,39 +88,39 @@ def quote():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Register user."""
-
-    # Zorgt ervoor dat andere gebruikers vergeten worden.
+    # forget any user_id
     session.clear()
 
     if request.method == "POST":
 
-        # Bij het registreren moet een username worden gekozen, anders volgt een errorbericht.
+        # ensure username was submitted
         if not request.form.get("username"):
-            return apology("Vul een username in, anders kun je geen account aanmaken!")
+            return apology("Missing username!")
 
-        # Bij het registreren moet een wachtwoord worden gekozen, anders een apology.
+        # ensure password was submitted
         elif not request.form.get("password"):
-            return apology("Vul een wachtwoord in, anders kun je geen account aanmaken!")
+            return apology("must provide password!")
 
-        # Het wachtwoord moet bevestigd worden.
-        elif not request.form.get("password_confirmation"):
-            return apology("Vul nogmaals je wachtwoord in, anders kun je geen account aanmaken!")
+        elif not request.form.get("password") == request.form.get("confirmpassword"):
+            return apology("passwords do not match")
 
-        # Het wachtwoord en de wachtwoordbevestiging moeten overeenkomen, anders geen account.
-        elif request.form.get("password") != request.form.get("password_confirmation"):
-            return apology("Je wachtwoorden komen niet overeen, probeer opnieuw!")
+        # change to hash for security
+        hash = myctx.hash(request.form.get("password"))
 
-        # Slaat gebruiker op.
-        users = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)", username=request.form.get("username"), hash=pwd_context.encrypt(request.form.get("password")))
+        result = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",
+            username=request.form.get("username"), hash=hash)
 
-        if not users:
-            return apology("Probeer een andere gebruikersnaam.")
+        if not result:
+            return apology("username already taken")
 
-        session["user_id"] = users
+        user_id = db.execute("SELECT id FROM users WHERE username IS :username",\
+        username=request.form.get("username"))
 
-        return redirect(url_for("homepage"))
 
-    # Via "GET"
+        # remember which user has logged in
+        session['user_id'] = user_id[0]['id']
+
+        # redirect user to home page
+        return redirect(url_for("index"))
     else:
         return render_template("register.html")
