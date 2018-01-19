@@ -2,6 +2,9 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from passlib.context import CryptContext
+from passlib.apps import custom_app_context as pwd_context
+from flask import Flask, render_template, request
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 myctx = CryptContext(schemes=["sha256_crypt", "md5_crypt"])
 from tempfile import mkdtemp
 
@@ -35,6 +38,19 @@ db = SQL("sqlite:///trigger.db")
 @login_required
 def homepage():
     return apology("TODO")
+
+photos = UploadSet('photos', IMAGES)
+
+app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
+configure_uploads(app, photos)
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        return filename
+    return render_template('upload.html')
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
