@@ -80,6 +80,12 @@ def logout():
     # redirect user to login form
     return redirect(url_for("login"))
 
+@app.route("/quote", methods=["GET", "POST"])
+@login_required
+def quote():
+    """Get stock quote."""
+    return apology("TODO")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user."""
