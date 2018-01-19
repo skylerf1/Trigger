@@ -1,7 +1,8 @@
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
-from passlib.apps import custom_app_context as pwd_context
+from passlib.context import CryptContext
+myctx = CryptContext(schemes=["sha256_crypt", "md5_crypt"])
 from tempfile import mkdtemp
 
 from helpers import *
@@ -109,7 +110,7 @@ def register():
 
         result = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",
             username=request.form.get("username"), hash=hash)
-
+        print (result)
         if not result:
             return apology("username already taken")
 
@@ -121,6 +122,6 @@ def register():
         session['user_id'] = user_id[0]['id']
 
         # redirect user to home page
-        return redirect(url_for("index"))
+        return redirect(url_for("homepage"))
     else:
         return render_template("register.html")
