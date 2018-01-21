@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 from flask_session import Session
 from passlib.context import CryptContext
 from passlib.apps import custom_app_context as pwd_context
@@ -48,9 +48,12 @@ configure_uploads(app, photos)
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
-        return filename
+        return render_template('complete.html', image_name=filename)
     return render_template('upload.html')
 
+@app.route('/uploads/<filename>')
+def send_image(filename):
+    return send_from_directory("static/img", filename)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
