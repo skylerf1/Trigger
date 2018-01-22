@@ -41,15 +41,24 @@ def homepage():
 
 photos = UploadSet('photos', IMAGES)
 
+
 app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
 configure_uploads(app, photos)
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-    if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
-        return filename
+    if request.method == 'POST':
+
+
+        photo_description = (request.form.get("inputDescription"))
+        photo_name = (request.form.get("file"))
+
+        db.execute("INSERT INTO gallery (photo_description, photo_name, photo_user_id) VALUES (:photo_description, :photo_name, :photo_user_id);", \
+            photo_description = photo_description, photo_name = photo_name, photo_user_id = session["user_id"])
+
+
+        return redirect(url_for("upload"))
     return render_template('upload.html')
 
 
