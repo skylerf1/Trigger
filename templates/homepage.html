@@ -1,3 +1,4 @@
+
 {% extends "layout.html" %}
 
 {% block title %}
@@ -9,7 +10,7 @@
         <div>
             {% for photo in uploads %}
 
-                <img src = "static/img/{{ photo.photo_name }}" <br> {{photo.photo_description }} </br>  <br></br><br> {{photo.username }} </br>
+                <img src = "static/img/{{ photo.photo_name }}" <br> {{photo.photo_description }} </br>  <br></br><br> {{photo.photo_user_id }} </br>
 
 
                 <button type="button" class = "btn btn-danger" type = "submit" >Trig</button>
