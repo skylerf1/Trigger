@@ -34,19 +34,22 @@ Session(app)
 # configure CS50 Library to use SQLite database
 db = SQL("sqlite:///trigger.db")
 
-@app.route("/")
-@login_required
-def homepage():
-    if request.method == "GET":
-        uploads = db.execute("SELECT * FROM gallery")
-
-        return render_template("homepage.html", uploads = uploads)
-
-
 photos = UploadSet('photos', IMAGES)
 
 app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
 configure_uploads(app, photos)
+
+@app.route("/")
+@login_required
+def homepage():
+    if request.method == "GET":
+        uploads = db.execute("SELECT * FROM gallery ORDER BY photo_date DESC")
+        usernames = db.execute("SELECT * FROM users WHERE id = :user_id", user_id = session["user_id"] )
+
+        if not uploads:
+            return apology("Geen foto's beschikbaar.")
+
+        return render_template("homepage.html", uploads = uploads, usernames = usernames)
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required

@@ -8,8 +8,19 @@
     <form action = "{{ url_for('homepage') }}" method = "post">
         <div>
             {% for photo in uploads %}
-                <a><img src = "static/img/{{ photo.photo_name }}" /><br> {{photo.photo_description }} </br></a>
+
+                <img src = "static/img/{{ photo.photo_name }}" <br> {{photo.photo_description }} </br>  <br></br><br> {{photo.username }} </br>
+
+
+                <button type="button" class = "btn btn-danger" type = "submit" >Trig</button>
+                <button type="button" class = "btn btn-danger" type = "submit" >Volg</button>
+                <div class="form-group">
+                  <label for="comment">Comment:</label>
+                  <textarea class="form-control" rows="5" id="comment"></textarea>
+</div>
+                </div><br>
             {% endfor %}
         </div>
     </form>
+
 {% endblock %}
