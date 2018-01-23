@@ -49,7 +49,7 @@ def homepage():
         if not uploads:
             return apology("Geen foto's beschikbaar.")
 
-        return render_template("homepage.html", uploads = uploads, usernames = usernames)
+        return render_template("homepage.html", uploads = uploads[:3], usernames = usernames)
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required

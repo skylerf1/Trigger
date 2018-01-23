@@ -7,8 +7,10 @@
 
 {% block main %}
     <form action = "{{ url_for('homepage') }}" method = "post">
+        {% for photo in uploads %}
         <div>
-            {% for photo in uploads %}
+
+                hello
 
                 <img src = "static/img/{{ photo.photo_name }}" <br> {{photo.photo_description }} </br>  <br></br><br> {{photo.photo_user_id }} </br>
 
@@ -18,10 +20,10 @@
                 <div class="form-group">
                   <label for="comment">Comment:</label>
                   <textarea class="form-control" rows="5" id="comment"></textarea>
-</div>
-                </div><br>
-            {% endfor %}
+                </div>
         </div>
+        <br>
+        {% endfor %}
     </form>
 
 {% endblock %}
