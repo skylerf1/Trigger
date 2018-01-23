@@ -38,9 +38,9 @@ db = SQL("sqlite:///trigger.db")
 @login_required
 def homepage():
     if request.method == "GET":
-        uploads = db.execute("SELECT * FROM gallery WHERE photo_user_id = :photo_user_id", photo_user_id=session["user_id"])
+        uploads = db.execute("SELECT * FROM gallery")
 
-        return render_template("homepage.html")
+        return render_template("homepage.html", uploads = uploads)
 
 
 photos = UploadSet('photos', IMAGES)
