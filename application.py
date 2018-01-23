@@ -37,10 +37,13 @@ db = SQL("sqlite:///trigger.db")
 @app.route("/")
 @login_required
 def homepage():
-    return apology("TODO")
+    if request.method == "GET":
+        uploads = db.execute("SELECT * FROM gallery WHERE photo_user_id = :photo_user_id", photo_user_id=session["user_id"])
+
+        return render_template("homepage.html")
+
 
 photos = UploadSet('photos', IMAGES)
-
 
 app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
 configure_uploads(app, photos)
@@ -48,17 +51,16 @@ configure_uploads(app, photos)
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-    if request.method == 'POST':
-
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
 
         photo_description = (request.form.get("inputDescription"))
-        photo_name = (request.form.get("file"))
+        # photo_name = (request.form.get("file"))
 
-        db.execute("INSERT INTO gallery (photo_description, photo_name, photo_user_id) VALUES (:photo_description, :photo_name, :photo_user_id);", \
-            photo_description = photo_description, photo_name = photo_name, photo_user_id = session["user_id"])
+        db.execute("INSERT INTO gallery (photo_name, photo_user_id, photo_description) VALUES (:photo_name, :photo_user_id, :photo_description);", \
+            photo_name = filename, photo_user_id = session["user_id"], photo_description = photo_description)
 
-
-        return redirect(url_for("upload"))
+        return redirect(url_for("homepage"))
     return render_template('upload.html')
 
 
@@ -107,11 +109,11 @@ def logout():
     # redirect user to login form
     return redirect(url_for("login"))
 
-@app.route("/quote", methods=["GET", "POST"])
-@login_required
-def quote():
-    """Get stock quote."""
-    return apology("TODO")
+# @app.route("/homepage", methods=["GET", "POST"])
+# @login_required
+# def quote():
+#     """Get stock quote."""
+#     return apology("TODO lollll")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

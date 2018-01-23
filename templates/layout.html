@@ -33,20 +33,23 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="{{ url_for('homepage') }}"><span class="red">TRIGGER</span></a>
+                        <center><P STYLE="font-size: 40px; font-family: monospace;"> <b><u> TRIGGER</u></b></P></center>
+                        <!--<a class="navbar-brand" href="{{ url_for('homepage') }}"><span class="red">TRIGGER</span></a>-->
 
                     </div>
                     <div class="collapse navbar-collapse" id="navbar">
                         {% if session.user_id %}
 
                             <ul class="nav navbar-nav">
-                                <li><a href="{{ url_for('quote') }}">Home</a></li>
-                                <li><a href="{{ url_for('quote') }}">Followersfeed ?</a></li>
+                                <li><a href="{{ url_for('homepage') }}">Home</a></li>
+                                <li><a href="{{ url_for('homepage') }}">Followersfeed</a></li>
                                 <li><a href="{{ url_for('upload') }}">Post</a></li>
 
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
+                                <li><a href="{{ url_for('logout') }}">Instellingen</a></li>
                                 <li><a href="{{ url_for('logout') }}">Uitloggen</a></li>
+
 
                             </ul>
                         {% else %}
