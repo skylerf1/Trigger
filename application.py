@@ -43,13 +43,14 @@ configure_uploads(app, photos)
 @login_required
 def homepage():
     if request.method == "GET":
-        uploads = db.execute("SELECT * FROM gallery ORDER BY photo_date DESC")
-        usernames = db.execute("SELECT * FROM users WHERE id = :user_id", user_id = session["user_id"] )
+        uploads = db.execute("SELECT gallery.photo_id,photo_description, photo_date, photo_name, username, photo_user_id, trigs FROM gallery \
+            JOIN users ON photo_user_id = users.id  LEFT JOIN (SELECT COUNT(*) as trigs, photo_id FROM triggers GROUP BY photo_id ) \
+            as triggers ON triggers.photo_id = gallery.photo_id ORDER BY photo_date DESC;")
 
         if not uploads:
             return apology("Geen foto's beschikbaar.")
 
-        return render_template("homepage.html", uploads = uploads[:3], usernames = usernames)
+        return render_template("homepage.html", uploads = uploads)
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
@@ -156,3 +157,79 @@ def register():
         return redirect(url_for("homepage"))
     else:
         return render_template("register.html")
+@app.route('/follow', methods=['POST'])
+@login_required
+def follow():
+    if request.form.get("follow"):
+        follow_id = request.form.get("follow")
+
+        db.execute("INSERT INTO volgen (user_id, follower_id) VALUES (:user_id, :follower_id)", user_id = session["user_id"], follower_id = follow_id)
+
+    return redirect(url_for("homepage"))
+
+@app.route('/trigg', methods=['POST'])
+@login_required
+def trigg():
+    if request.form.get("trigg"):
+        photo_id = request.form.get("trigg")
+
+        db.execute("INSERT INTO triggers (user_id, photo_id) VALUES (:user_id, :photo_id)", user_id = session["user_id"], photo_id = photo_id)
+
+    return redirect(url_for("homepage"))
+@app.route("/change_password", methods=["GET", "POST"])
+def change_password():
+    """Change user password"""
+    # manipulate the information the user has submitted
+    if request.method == 'POST':
+
+        # ensure old password was submitted
+        if not request.form.get('password'):
+            return apology("Voer je oude wachtwoord in.")
+
+        # query database for username
+        rows = db.execute("SELECT * FROM users WHERE id = :user_id", user_id=session['user_id'])
+
+        # ensure username exists and password is correct
+        if len(rows) != 1 or not pwd_context.verify(request.form.get('password'), rows[0]['hash']):
+            return apology("old password invalid")
+
+        # ensure new password was submitted
+        if not request.form.get("new-password"):
+            return apology("must provide new password")
+
+        # ensure password confirmation was submitted
+        if not request.form.get("password-confirm"):
+            return apology("must provide password confirmation")
+
+        # ensure password and confirmation match
+        if request.form.get("new-password") != request.form.get("password-confirm"):
+            return apology("passwords must match")
+
+        # store the hash of the password and not the actual password that was typed in
+        password = request.form.get("new-password")
+        hash = pwd_context.encrypt(password)
+
+        # username must be a unique field
+        result = db.execute("UPDATE users SET hash=:hash", hash=hash)
+        if not result:
+            return apology("that didn't work")
+
+        return redirect(url_for("homepage"))
+
+    else:
+        return render_template("change_password.html")
+
+@app.route("/change_username", methods=["GET", "POST"])
+def change_username():
+    """Change username"""
+    return apology("moet nog")
+
+@app.route("/profile", methods=["GET", "POST"])
+@login_required
+def profile():
+    return apology("moet nog")
+
+@app.route("/delete_account", methods=["GET", "POST"])
+@login_required
+def delete_account():
+    return apology("moet nog")

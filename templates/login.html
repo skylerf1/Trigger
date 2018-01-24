@@ -8,13 +8,13 @@
     <form action="{{ url_for('login') }}" method="post">
         <fieldset>
             <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
+                <input required autocomplete="off" autofocus class="form-control" name="username" placeholder="Gebruikersnaam" type="text"/>
             </div>
             <div class="form-group">
-                <input class="form-control" name="password" placeholder="Password" type="password"/>
+                <input required class="form-control" name="password" placeholder="Wachtwoord" type="password"/>
             </div>
             <div class="form-group">
-                <button class="btn btn-default" type="submit">Log In</button>
+                <button class="btn btn-danger" type="submit">Log in</button>
 
             </div>
         </fieldset>
