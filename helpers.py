@@ -1,9 +1,14 @@
+from cs50 import SQL
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 import csv
 import urllib.request
+from passlib.context import CryptContext
+from passlib.apps import custom_app_context as pwd_context
 
 from flask import redirect, render_template, request, session
 from functools import wraps
 
+db = SQL("sqlite:///trigger.db")
 
 def apology(message, code=400):
     """Renders message as an apology to user."""
@@ -33,9 +38,41 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def login(username,password):
+    # query database for username
+    rows = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+
+    # ensure username exists and password is correct
+    if len(rows) != 1 or not pwd_context.verify(password, rows[0]["hash"]):
+        return apology("invalid username and/or password")
+
+    # remember which user has logged in
+    session["user_id"] = rows[0]["id"]
+
+def home():
+    uploads = db.execute("SELECT gallery.photo_id,photo_description, photo_date, photo_name, username, photo_user_id, trigs FROM gallery \
+            JOIN users ON photo_user_id = users.id  LEFT JOIN (SELECT COUNT(*) as trigs, photo_id FROM triggers GROUP BY photo_id ) \
+            as triggers ON triggers.photo_id = gallery.photo_id ORDER BY photo_date DESC;")
+    return uploads
+def upload(filename, photo_description, user_id):
+    db.execute("INSERT INTO gallery (photo_name, photo_user_id, photo_description) VALUES (:photo_name, :photo_user_id, :photo_description);", \
+            photo_name = filename, photo_user_id = user_id, photo_description = photo_description)
+def register(username,hash):
+    result = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=hash)
+    if not result:
+            return apology("username already taken")
+
+    user_id = db.execute("SELECT id FROM users WHERE username IS :username", \
+        username=username)
+
+    # remember which user has logged in
+    session['user_id'] = user_id[0]['id']
+def follow(follow_id, user_id):
+    db.execute
+def trigg(photo_id, user_id):
+    db.execute("INSERT INTO triggers (user_id, photo_id) VALUES (:user_id, :photo_id)", user_id = user_id, photo_id = photo_id)
 
 
 
-def usd(value):
-    """Formats value as USD."""
-    return f"${value:,.2f}"
+
+
