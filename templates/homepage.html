@@ -1,4 +1,3 @@
-
 {% extends "layout.html" %}
 
 {% block title %}
@@ -8,22 +7,26 @@
 {% block main %}
     {% for photo in uploads %}
         <div>
-                <img src = "static/img/{{ photo.photo_name }}" <br> {{photo.photo_description }} </br>  <br></br><br> {{photo.username }} </br>
+                <img src = "static/img/{{ photo.photo_name }}" width="850" height="650">
+                <br> </br>
+
 
                 <form action = "{{ url_for('trigg') }}" method = "post" onsubmit="return value">
                 <button name="trigg" class = "btn btn-danger" value = "{{ photo.photo_id }}">Trig</button>
                 </form>
+
                 <form action = "{{ url_for('follow') }}" method = "post" onsubmit="return value">
-                <!--<button type="button" class = "btn btn-danger" type = "submit" name = "follow" value= photo.username  >Volg</button>-->
                 <button name="follow"  class = "btn btn-danger"  value="{{ photo.photo_user_id }}">Follow</button>
                 </form>
-                {{ photo.trigs }}
 
+                <form action = "{{ url_for('comment') }}" method = "post" onsubmit="return value">
+                <button name="comment"  class = "btn btn-danger"  value="{{ photo.photo_user_id }}">Comment</button>
+                </form>
 
-                <!--<div class="form-group">-->
-                <!--  <label for="comment">Comment:</label>-->
-                <!--  <textarea class="form-control" rows="5" id="comment"></textarea>-->
-                <!--</div>-->
+                {{photo.photo_description }}
+                <br> {{photo.username }} </br>
+                {{ photo.trigs }} triggs
+
         </div>
         <br>
         {% endfor %}

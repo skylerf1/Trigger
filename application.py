@@ -215,3 +215,23 @@ def profile():
 @helpers.login_required
 def delete_account():
     return helpers.apology("moet nog")
+
+@app.route('/comment', methods=['POST', "GET"])
+@helpers.login_required
+def comment():
+    if request.method == 'POST':
+        if request.form.get("comment"):
+
+            return render_template("comment.html")
+    else:
+        return render_template("homepage.html")
+
+@app.route('/search_gif', methods=["GET"])
+@helpers.login_required
+def search_gif():
+    if request.method == 'GET':
+        if request.form.get("comment"):
+
+            return render_template("comment.html")
+    else:
+        return render_template("homepage.html")
