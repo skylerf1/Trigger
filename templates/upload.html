@@ -5,19 +5,20 @@
 {% endblock %}
 
 {% block main %}
-
+<center>
     <form method=POST enctype=multipart/form-data action="{{ url_for('upload') }}">
 
        <label for="txtPost">Beschrijving</label>
         <br>
-            <textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
+            <textarea class="form-control" rows ="3" id="txtPost" maxlength = "1000" name="inputDescription"></textarea>
         <br>
-        <input type=file name=photo>
+
        <div class = "form-group">
         <br>
-           <button class = "btn btn-danger" type="submit" > Post</button>
+           <button name = "post" class = "btn btn-danger" value = "post" type="submit" > Post</button>
 
        </div>
 
     </form>
+    </center>
 {% endblock %}

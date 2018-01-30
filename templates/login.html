@@ -5,18 +5,30 @@
 {% endblock %}
 
 {% block main %}
-    <form action="{{ url_for('login') }}" method="post">
-        <fieldset>
-            <div class="form-group">
-                <input required autocomplete="off" autofocus class="form-control" name="username" placeholder="Gebruikersnaam" type="text"/>
-            </div>
-            <div class="form-group">
-                <input required class="form-control" name="password" placeholder="Wachtwoord" type="password"/>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-danger" type="submit">Log in</button>
+    <center><p>
+        <div class="alert alert-danger">
+        <strong>Welkom!</strong> Je moet eerst inloggen voor je kunt beginnen met Triggen. Heb je nog geen account? Klik dan <a href="#" class="alert-link">hier</a>!
+        </div>
+        </p>
 
-            </div>
-        </fieldset>
-    </form>
+    </center>
+    <br></br>
+<form action="{{ url_for('login') }}" method="post">
+    <div class="container">
+  <form>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+      <input autocomplete="off" id="username" type="text" autofocus class="form-control" name="username" placeholder="Gebruikersnaam">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+      <input id="password" type="password" class="form-control" name="password" placeholder="Wachtwoord">
+    </div>
+    <span class="help-block">Dit is even een test.</span>
+    <br>
+    <div class="form-group">
+    <button class="btn btn-danger" type="submit">Log in</button>
+  </form>
+  <br>
+  </form>
 {% endblock %}

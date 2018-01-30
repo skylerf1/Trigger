@@ -1,14 +1,31 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Upload
+    Comment
 {% endblock %}
+
 
 {% block main %}
+<center>
+    <form method=POST enctype=multipart/form-data action="{{ url_for('comment', picid = picid) }}">
 
-    <form method=POST enctype=multipart/form-data action="{{ url_for('comment') }}">
+       <label for="txtPost">Beschrijving</label>
+        <br>
+            <textarea class="form-control"  id="txtPost" name="inputcomment"></textarea>
+        <br>
 
-       hoi
+       <div class = "form-group">
+        <br>
+           <button class = "btn btn-danger" type= "submit" value = "post" name = "post" > Post</button>
+
+       </div>
 
     </form>
+    </center>
 {% endblock %}
+
+
+
+
+
+

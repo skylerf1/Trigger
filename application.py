@@ -4,9 +4,14 @@ from flask_session import Session
 from passlib.context import CryptContext
 from passlib.apps import custom_app_context as pwd_context
 from flask import Flask, render_template, request
-from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 myctx = CryptContext(schemes=["sha256_crypt", "md5_crypt"])
 from tempfile import mkdtemp
+import time
+import giphy_client
+from giphy_client.rest import ApiException
+from operator import itemgetter
+import json
 
 import helpers
 
@@ -38,16 +43,22 @@ photos = UploadSet('photos', IMAGES)
 app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
 configure_uploads(app, photos)
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 @helpers.login_required
 def homepage():
     if request.method == "GET":
         uploads = helpers.home()
         if not uploads:
             return helpers.apology("Geen foto's beschikbaar.")
-
         return render_template("homepage.html", uploads = uploads)
-        #return render_template('homepage.html')
+
+    else:
+        if request.form.get("comment"):
+            session["photo_id"] = photo_id[0]["photo_id"]
+            print(session["photo_id"])
+            return redirect(url_for('comment', picid = session["photo_id"] ))
+        return render_template('homepage.html')
+
 @app.route('/upload', methods=['GET', 'POST'])
 @helpers.login_required
 def upload():
@@ -102,11 +113,6 @@ def logout():
     # redirect user to login form
     return redirect(url_for("login"))
 
-# @app.route("/homepage", methods=["GET", "POST"])
-# @helpers.helpers.login_required
-# def quote():
-#     """Get stock quote."""
-#     return helpers.apology("TODO lollll")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -216,22 +222,55 @@ def profile():
 def delete_account():
     return helpers.apology("moet nog")
 
-@app.route('/comment', methods=['POST', "GET"])
+@app.route('/comment/<picid>', methods=['GET','POST'])
 @helpers.login_required
-def comment():
-    if request.method == 'POST':
-        if request.form.get("comment"):
+def comment(picid):
+        if request.method == 'POST' and request.form.get("inputcomment") != None:
+            photo_id = picid
+            photo_comment = request.form.get("inputcomment")
+            helpers.comment(photo_comment, photo_id)
 
-            return render_template("comment.html")
-    else:
-        return render_template("homepage.html")
+            return redirect(url_for("homepage"))
 
-@app.route('/search_gif', methods=["GET"])
+        return render_template('comment.html', picid = picid)
+
+# def upload():
+#     if request.method == 'POST' and 'photo' in request.files:
+#         filename = photos.save(request.files['photo'])
+
+#         photo_description = (request.form.get("inputDescription"))
+
+#         helpers.upload(filename, photo_description, session["user_id"])
+
+#         return redirect(url_for("homepage"))
+#     return render_template('upload.html')
+
+
+@app.route("/gifsearch", methods=["GET", "POST"])
 @helpers.login_required
-def search_gif():
-    if request.method == 'GET':
-        if request.form.get("comment"):
+def gifsearch():
+    if request.method == "POST":
 
-            return render_template("comment.html")
+        gifsearch = request.form.get("searchgif")
+
+        api_instance = giphy_client.DefaultApi()
+        api_key = 'sWHka5EbtdTIgSytgq2QoI7MV1FuIuRl'
+        q = gifsearch
+        limit = 21
+        offset = 0
+        lang = 'en'
+
+        try:
+            api_response = api_instance.gifs_search_get(api_key, q, limit=limit, offset=offset, lang = lang)
+            return render_template("gif.html", api_response=api_response)
+
+        except ApiException as e:
+            return apology ("Sorry, no gifs found")
+
     else:
-        return render_template("homepage.html")
+        return render_template("gifsearch.html")
+
+
+
+
+

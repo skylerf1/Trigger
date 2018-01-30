@@ -4,31 +4,65 @@
     Homepage
 {% endblock %}
 
+.inner
+{
+    display: inline;
+}
+
 {% block main %}
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+    <center><p>
+        <div class="alert alert-danger">
+        <strong>Bekijk hier alle posts!</strong> Klik <a href="#" class="alert-link">hier </a> om zelf iets te posten!
+        </div>
+        </p>
+    <FORM>
+    <span style="font-size: 35px" class="glyphicon glyphicon-refresh " onClick="history.go(0)" ></span>
+    </FORM>
+
+    </center>
+    <br></br>
+
+
     {% for photo in uploads %}
         <div>
-                <img src = "static/img/{{ photo.photo_name }}" width="850" height="650">
-                <br> </br>
+             <center>
 
+            <div style="font-size: 24px; font-family: monospace;">  {{photo.photo_description }}</div>
+
+
+            <img src = "static/img/{{ photo.photo_name }}" width="850" height="650">
+            <br> </br>
+
+              <div class="btn-group">
 
                 <form action = "{{ url_for('trigg') }}" method = "post" onsubmit="return value">
-                <button name="trigg" class = "btn btn-danger" value = "{{ photo.photo_id }}">Trig</button>
+                <div class ="inner"><button name="trigg" class = "btn btn-danger btn-block" value = "{{ photo.photo_id }}">Trig</button></div>
                 </form>
-
+                <form action = "{{ url_for('comment', picid = photo["photo_id"]) }}" method = "post" onsubmit="return value">
+                <div class ="inner"><button name="comment" class = "btn btn-danger btn-block" value = "{{ photo.photo_id }}">Comment</button></div>
+                </form>
                 <form action = "{{ url_for('follow') }}" method = "post" onsubmit="return value">
-                <button name="follow"  class = "btn btn-danger"  value="{{ photo.photo_user_id }}">Follow</button>
+                <<div class ="inner"><button name="gif"  class = "btn btn-danger btn-block"  value="{{ photo.photo_user_id }}">Gif</button></div>
+                </form>
+                 <form action = "{{ url_for('follow') }}" method = "post" onsubmit="return value">
+                <div class ="inner"><button name="follow"  class = "btn btn-danger btn-block"  value="{{ photo.photo_user_id }}">Follow {{photo.username}}</button>
                 </form>
 
-                <form action = "{{ url_for('comment') }}" method = "post" onsubmit="return value">
-                <button name="comment"  class = "btn btn-danger"  value="{{ photo.photo_user_id }}">Comment</button>
-                </form>
+                <!--<button type = "button" class="btn btn-danger" action = "{{ url_for('trigg') }}" method = "post" onsubmit="return value" name="trigg" value = "{{ photo.photo_id }}">Trig {{ photo.trigs }} triggs</button>-->
+                <!--<button type="button" class="btn btn-danger" >Comment</button>-->
+                <!--<button type="button" class="btn btn-danger">Sony</button>-->
+              </div>
 
-                {{photo.photo_description }}
-                <br> {{photo.username }} </br>
-                {{ photo.trigs }} triggs
+            <span class="label label-danger">{{ photo.trigs }} triggs </span>
+            <span class="label label-danger">{{ photo.comments } </span>
+
 
         </div>
         <br>
-        {% endfor %}
+        </center>
 
+        {% endfor %}
+</body>
 {% endblock %}

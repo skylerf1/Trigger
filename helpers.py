@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+from flask_uploads import UploadSet, configure_uploads
 import csv
 import urllib.request
 from passlib.context import CryptContext
@@ -23,7 +23,6 @@ def apology(message, code=400):
             s = s.replace(old, new)
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
-
 
 def login_required(f):
     """
@@ -49,14 +48,18 @@ def login(username,password):
     # remember which user has logged in
     session["user_id"] = rows[0]["id"]
 
+    return rows
+
 def home():
     uploads = db.execute("SELECT gallery.photo_id,photo_description, photo_date, photo_name, username, photo_user_id, trigs FROM gallery \
             JOIN users ON photo_user_id = users.id  LEFT JOIN (SELECT COUNT(*) as trigs, photo_id FROM triggers GROUP BY photo_id ) \
             as triggers ON triggers.photo_id = gallery.photo_id ORDER BY photo_date DESC;")
     return uploads
+
 def upload(filename, photo_description, user_id):
     db.execute("INSERT INTO gallery (photo_name, photo_user_id, photo_description) VALUES (:photo_name, :photo_user_id, :photo_description);", \
             photo_name = filename, photo_user_id = user_id, photo_description = photo_description)
+
 def register(username,hash):
     result = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=hash)
     if not result:
@@ -67,11 +70,20 @@ def register(username,hash):
 
     # remember which user has logged in
     session['user_id'] = user_id[0]['id']
+
+
 def follow(follow_id, user_id):
-    db.execute
+     db.execute("INSERT INTO volgen (user_id, follower_id) VALUES (:user_id, :follower_id)", user_id = session["user_id"], follower_id = follow_id)
+
 def trigg(photo_id, user_id):
     db.execute("INSERT INTO triggers (user_id, photo_id) VALUES (:user_id, :photo_id)", user_id = user_id, photo_id = photo_id)
 
+def comment(photo_comment, photo_id):
+
+    comment = db.execute("INSERT INTO comments (photo_comment, user_id, photo_id ) VALUES (:photo_comment, :user_id, :photo_id);", \
+    photo_comment = photo_comment, user_id = session["user_id"], photo_id = photo_id)
+
+    return comment
 
 
 
