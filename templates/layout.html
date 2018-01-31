@@ -32,27 +32,21 @@
 
                     <ul class="nav navbar-nav">
                         <li><a href="{{ url_for('homepage') }}"  >Home</a></li>
+                        <li><a href="{{ url_for('follower_feed') }}"> Followersfeed </span></a></li>
                         <li><a href="{{ url_for('upload') }}"> Post </span></a></li>
-                        <li><a href="{{ url_for('gifsearch') }}"> Gif </span></a></li>
+                        <li><a href="{{ url_for('gifsearch') }}"> Gifpost </span></a></li>
                     </ul>
 
 
 
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span style="font-size: 25px" class="glyphicon glyphicon-cog "></span></a>
-                            <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                              <li><a href="{{ url_for('change_password') }}">Verander wachtwoord</a></li>
-                              <li><a href="{{ url_for('change_username') }}">Verander gebruikersnaam</a></li>
-                              <li><a href="{{ url_for('delete_account') }}">Verwijder account</a></li>
-                            </ul>
-                          </li>
 
-
+                        <li><a href="{{ url_for('change_password') }}"><span style="font-size: 25px" class="glyphicon glyphicon-info-sign "></span></a></li>
+                        <li><a href="{{ url_for('change_password') }}"><span style="font-size: 25px" class="glyphicon glyphicon-cog "></span></a></li>
                         <li><a href="{{ url_for('profile') }}"><span style="font-size: 25px" class="glyphicon glyphicon-user "></span></a></li>
                         <li><a href="{{ url_for('logout') }}"><span style="font-size: 25px" class="glyphicon glyphicon-log-out "></span></a></li>
+
                     </ul>
 
                 {% else %}

@@ -6,20 +6,55 @@
 {% endblock %}
 
 {% block main %}
-    <form action="{{ url_for('register') }}" method="post">
-        <fieldset>
-            <div class="form-group">
-                <input required autocomplete="off" autofocus class="form-control" name="username" placeholder="Gebruikersnaam" type="text"/>
-            </div>
-            <div class="form-group">
-                <input required class="form-control" name="password" placeholder="Wachtwoord" type="password"/>
-            </div>
-            <div class="form-group">
-                <input required class="form-control" name="confirmpassword" placeholder="Wachtwoord (bevestiging)" type="password"/>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-danger" type="submit">Registeer</button>
-            </div>
-        </fieldset>
-    </form>
+    <center>
+        <div class="alert alert-danger">
+        <strong>Welkom bij Trigger!</strong> Registeer en je kunt beginnen met triggen! Heb je al een account? Klik <a href="{{ url_for('login') }}" class="alert-link">hier</a>!
+        </div>
+           </center>
+    <br></br>
+<form action="{{ url_for('register') }}" method="post">
+    <div class="container">
+  <form>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+      <input autocomplete="off" id="username" type="text" required autofocus class="form-control" name="username" placeholder="Gebruikersnaam">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+      <input id="password" type="password" required class="form-control" name="password" placeholder="Wachtwoord">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+      <input id="password" type="password" required class="form-control" name="confirmpassword" placeholder="Wachtwoord (bevestiging)">
+    </div>
+    <br>
+    <div class="form-group">
+    <button class="btn btn-danger" type="submit">Registeer</button>
+  </form>
+  <br>
+  </form>
 {% endblock %}
+
+
+
+
+
+
+
+ <!--<form action="{{ url_for('register') }}" method="post">-->
+ <!--       <fieldset>-->
+ <!--           <div class="form-group">-->
+ <!--               <input required autocomplete="off" autofocus class="form-control" name="username" placeholder="Gebruikersnaam" type="text"/>-->
+ <!--           </div>-->
+ <!--           <div class="form-group">-->
+ <!--               <input required class="form-control" name="password" placeholder="Wachtwoord" type="password"/>-->
+ <!--           </div>-->
+ <!--           <div class="form-group">-->
+ <!--               <input required class="form-control" name="confirmpassword" placeholder="Wachtwoord (bevestiging)" type="password"/>-->
+ <!--           </div>-->
+ <!--           <div class="form-group">-->
+ <!--               <button class="btn btn-danger" type="submit">Registeer</button>-->
+ <!--           </div>-->
+ <!--       </fieldset>-->
+ <!--   </form>-->
+ <!--   </center>-->

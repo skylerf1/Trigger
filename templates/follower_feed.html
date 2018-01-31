@@ -1,19 +1,8 @@
 {% extends "layout.html" %}
 
-{% block title %}
-    Homepage
-{% endblock %}
 
-.inner
-{
-    display: inline;
-}
 
-<style>
-.img-text, .div {
-  display:inline-block;
-}
-</style>
+    <form method=POST enctype=multipart/form-data action="{{ url_for('follower_feed') }}">
 
 {% block main %}
 <body data-spy="scroll" data-target=".navbar" data-offset="50">

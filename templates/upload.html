@@ -6,17 +6,21 @@
 
 {% block main %}
 <center>
+    <div class="alert alert-danger">
+        <strong>Post hier je foto! </strong> Wil je liever een GIF uploaden? Dat kan ook! Klik dan <a href="{{ url_for('gifsearch') }}" class="alert-link">hier</a>!
+        </div>
+
     <form method=POST enctype=multipart/form-data action="{{ url_for('upload') }}">
 
        <label for="txtPost">Beschrijving</label>
         <br>
             <textarea class="form-control" rows ="3" id="txtPost" maxlength = "1000" name="inputDescription"></textarea>
         <br>
-
+        <input required type=file name=photo accept=".jpg, .jpeg, .png">
        <div class = "form-group">
         <br>
            <button name = "post" class = "btn btn-danger" value = "post" type="submit" > Post</button>
-
+        </br>
        </div>
 
     </form>

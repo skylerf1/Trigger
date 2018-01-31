@@ -12,7 +12,7 @@ import giphy_client
 from giphy_client.rest import ApiException
 from operator import itemgetter
 import json
-
+import os
 import helpers
 
 # configure application
@@ -47,29 +47,29 @@ configure_uploads(app, photos)
 @helpers.login_required
 def homepage():
     if request.method == "GET":
+
         uploads = helpers.home()
+        volgend = helpers.volgend()
+        getrigged = helpers.getrigged()
+
         if not uploads:
             return helpers.apology("Geen foto's beschikbaar.")
-        return render_template("homepage.html", uploads = uploads)
 
-    else:
-        if request.form.get("comment"):
-            session["photo_id"] = photo_id[0]["photo_id"]
-            print(session["photo_id"])
-            return redirect(url_for('comment', picid = session["photo_id"] ))
-        return render_template('homepage.html')
+        return render_template("homepage.html", uploads = uploads, volgend=volgend, getrigged = getrigged)
+
+    return render_template('homepage.html')
 
 @app.route('/upload', methods=['GET', 'POST'])
 @helpers.login_required
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
+
         filename = photos.save(request.files['photo'])
-
         photo_description = (request.form.get("inputDescription"))
-
         helpers.upload(filename, photo_description, session["user_id"])
 
         return redirect(url_for("homepage"))
+
     return render_template('upload.html')
 
 
@@ -77,46 +77,39 @@ def upload():
 def login():
     """Log user in."""
 
-    # forget any user_id
     session.clear()
 
-    # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
         username = request.form.get("username")
         password = request.form.get("password")
 
-        # ensure username wasgit submitted
         if not username:
             return helpers.apology("must provide username")
 
-        # ensure password was submitted
         elif not password:
             return helpers.apology("must provide password")
 
         helpers.login(username, password)
 
-        # redirect user to home page
         return redirect(url_for("homepage"))
 
-    # else if user reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
 
 @app.route("/logout")
 def logout():
     """Log user out."""
 
-    # forget any user_id
     session.clear()
 
-    # redirect user to login form
     return redirect(url_for("login"))
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    # forget any user_id
+
     session.clear()
 
     if request.method == "POST":
@@ -125,30 +118,28 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmpassword")
 
-        # ensure username was submitted
         if not username:
             return helpers.apology("Missing username!")
 
-        # ensure password was submitted
         elif not password:
             return helpers.apology("must provide password!")
 
         elif not password == confirmation:
             return helpers.apology("passwords do not match")
 
-        # change to hash for security
         hash = myctx.hash(password)
 
         helpers.register(username,hash)
 
-        # redirect user to home page
         return redirect(url_for("homepage"))
     else:
         return render_template("register.html")
+
 @app.route('/follow', methods=['POST'])
 @helpers.login_required
 def follow():
     if request.form.get("follow"):
+
         follow_id = request.form.get("follow")
         helpers.follow(follow_id, session["user_id"])
 
@@ -158,47 +149,40 @@ def follow():
 @helpers.login_required
 def trigg():
     if request.form.get("trigg"):
-        photo_id = request.form.get("trigg")
 
+        photo_id = request.form.get("trigg")
         helpers.trigg(photo_id, session["user_id"])
 
-
     return redirect(url_for("homepage"))
+
 @app.route("/change_password", methods=["GET", "POST"])
 def change_password():
     """Change user password"""
-    # manipulate the information the user has submitted
+
     if request.method == 'POST':
 
-        # ensure old password was submitted
         if not request.form.get('password'):
             return helpers.apology("Voer je oude wachtwoord in.")
 
-        # query database for username
         rows = db.execute("SELECT * FROM users WHERE id = :user_id", user_id=session['user_id'])
 
-        # ensure username exists and password is correct
         if len(rows) != 1 or not pwd_context.verify(request.form.get('password'), rows[0]['hash']):
             return helpers.apology("old password invalid")
 
-        # ensure new password was submitted
         if not request.form.get("new-password"):
             return helpers.apology("must provide new password")
 
-        # ensure password confirmation was submitted
         if not request.form.get("password-confirm"):
             return helpers.apology("must provide password confirmation")
 
-        # ensure password and confirmation match
         if request.form.get("new-password") != request.form.get("password-confirm"):
             return helpers.apology("passwords must match")
 
-        # store the hash of the password and not the actual password that was typed in
         password = request.form.get("new-password")
         hash = myctx.hash(password)
 
-        # username must be a unique field
         result = db.execute("UPDATE users SET hash=:hash", hash=hash)
+
         if not result:
             return helpers.apology("that didn't work")
 
@@ -212,20 +196,11 @@ def change_username():
     """Change username"""
     return helpers.apology("moet nog")
 
-@app.route("/profile", methods=["GET", "POST"])
-@helpers.login_required
-def profile():
-    return helpers.apology("moet nog")
-
-@app.route("/delete_account", methods=["GET", "POST"])
-@helpers.login_required
-def delete_account():
-    return helpers.apology("moet nog")
-
 @app.route('/comment/<picid>', methods=['GET','POST'])
 @helpers.login_required
 def comment(picid):
         if request.method == 'POST' and request.form.get("inputcomment") != None:
+
             photo_id = picid
             photo_comment = request.form.get("inputcomment")
             helpers.comment(photo_comment, photo_id)
@@ -234,27 +209,15 @@ def comment(picid):
 
         return render_template('comment.html', picid = picid)
 
-# def upload():
-#     if request.method == 'POST' and 'photo' in request.files:
-#         filename = photos.save(request.files['photo'])
-
-#         photo_description = (request.form.get("inputDescription"))
-
-#         helpers.upload(filename, photo_description, session["user_id"])
-
-#         return redirect(url_for("homepage"))
-#     return render_template('upload.html')
-
-
 @app.route("/gifsearch", methods=["GET", "POST"])
 @helpers.login_required
 def gifsearch():
     if request.method == "POST":
 
         gifsearch = request.form.get("searchgif")
-
+        helpers.key()
+        api_key = os.environ.get("API_KEY")
         api_instance = giphy_client.DefaultApi()
-        api_key = 'sWHka5EbtdTIgSytgq2QoI7MV1FuIuRl'
         q = gifsearch
         limit = 21
         offset = 0
@@ -270,7 +233,48 @@ def gifsearch():
     else:
         return render_template("gifsearch.html")
 
+@app.route("/savegif", methods=["GET", "POST"])
+@helpers.login_required
+def savegif():
+    if request.method == "POST":
+        return redirect(url_for("upload"))
 
+    else:
+        filename = request.args.get('url')
+        helpers.giphy(filename)
+        return redirect(url_for("homepage"))
 
+@app.route("/getgif/<gifje>", methods=["GET"])
+def getgif(gifje):
+    return redirect("https://media1.giphy.com/media/" + gifje+"/giphy.gif")
 
+@app.route("/follower_feed", methods=['GET', 'POST'])
+@helpers.login_required
+def follower_feed():
+    if request.method == "GET":
+        volgend = helpers.volgend()
+        uploads = helpers.volgend_feed(volgend)
 
+        if not uploads:
+            return helpers.apology("Geen foto's beschikbaar.")
+
+        return render_template("follower_feed.html", uploads=uploads, volgend=volgend)
+
+    else:
+        return render_template("follower_feed.html")
+
+@app.route("/profile", methods=['GET', 'POST'])
+@helpers.login_required
+def profile():
+    if request.method == "GET":
+        user = helpers.current_user()
+        uploads = helpers.profile_feed(user)
+        volgend = helpers.volgend()
+
+        if not uploads:
+            return helpers.apology("Geen foto's beschikbaar.")
+
+        return render_template("profile.html", user=user, uploads=uploads, volgend=volgend)
+
+    else:
+        return render_template("profile.html")
