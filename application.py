@@ -254,11 +254,12 @@ def follower_feed():
     if request.method == "GET":
         volgend = helpers.volgend()
         uploads = helpers.volgend_feed(volgend)
+        getrigged = helpers.getrigged()
 
         if not uploads:
             return helpers.apology("Geen foto's beschikbaar.")
 
-        return render_template("follower_feed.html", uploads=uploads, volgend=volgend)
+        return render_template("follower_feed.html", uploads=uploads, volgend=volgend, getrigged=getrigged)
 
     else:
         return render_template("follower_feed.html")
@@ -270,11 +271,12 @@ def profile():
         user = helpers.current_user()
         uploads = helpers.profile_feed(user)
         volgend = helpers.volgend()
+        getrigged = helpers.getrigged()
 
         if not uploads:
             return helpers.apology("Geen foto's beschikbaar.")
 
-        return render_template("profile.html", user=user, uploads=uploads, volgend=volgend)
+        return render_template("profile.html", user=user, uploads=uploads, volgend=volgend, getrigged=getrigged)
 
     else:
         return render_template("profile.html")
