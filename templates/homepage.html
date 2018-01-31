@@ -4,53 +4,41 @@
     Homepage
 {% endblock %}
 
-.inner
-{
-    display: inline;
-}
-
-<style>
-.img-text, .div {
-  display:inline-block;
-}
-</style>
-
 {% block main %}
-<body data-spy="scroll" data-target=".navbar" data-offset="50">
 
-    <center><p>
+    <center>
+        <p>
         <div class="alert alert-danger">
-        <strong>Bekijk hier alle posts!</strong> Klik <a href="{{ url_for('upload') }}" class="alert-link">hier </a> om zelf iets te posten!
+            <strong>Bekijk hier alle posts!</strong> Klik <a href="{{ url_for('upload') }}" class="alert-link">hier </a> om zelf iets te posten!
         </div>
         </p>
-    <FORM>
+
+    <form>
     <span style="font-size: 35px" class="glyphicon glyphicon-refresh " onClick="history.go(0)" ></span>
-    </FORM>
+    </form>
 
     </center>
-    <br></br>
-
 
     {% for photo in uploads %}
         <div>
-             <center>
+            <center>
 
             <br><br>
-            {% if photo.photo_name.replace("'" , "")[:5] == 'https'  %}
 
+            {% if photo.photo_name.replace("'" , "")[:5] == 'https'  %}
                 <div class="img-text" style="font-size: 20px; font-family: cursive; color:crimson">{{ photo.trigs }} triggs </div>
                 <img src="{{ url_for('getgif', gifje=photo.photo_name.split('/')[4])   }}" width="500" height="500">
+
             {% else %}
                 <div style="font-size: 28px; font-family: monospace;">  {{photo.photo_description }} </div>
                 <div class="img-text" style="font-size: 20px; font-family: cursive; color:crimson">{{ photo.trigs }} triggs </div>
                 <img src = "static/img/{{ photo.photo_name }}" width="850" height="650">
-            {% endif %}
 
+            {% endif %}
 
             <br> </br>
 
             <div class="btn-group" style='display: inline-flex'>
-
                 {% if photo.photo_user_id in volgend %}
                 <form action = "{{ url_for('follow') }}" method = "post" onsubmit="return value">
                 <button name="follow"  class = "btn btn-success btn-block"  value="{{ photo.photo_user_id }}">Volgend {{photo.username}}</button>
@@ -75,23 +63,26 @@
                 <form action = "{{ url_for('comment', picid = photo["photo_id"]) }}" method = "post" onsubmit="return value">
                 <button name="comment" class = "btn btn-danger btn-block" value = "{{ photo.photo_id }}">Comment</button>
                 </form>
+            </div>
 
-        <br>
-
+                <br>
+            </center>
         </div>
 
-        </center>
-        <center>
+
         {% for comment in photo.comments %}
-                        <h5><b>{{ comment.username }}:</b> <i>{{ comment.photo_comment }}</p></h5>
-                        <p></i>
-
-                {% endfor %}
-        {% endfor %}
+        <center>
+            <h5><b>{{ comment.username }}:</b> <i>{{ comment.photo_comment }}</p></h5>
+            <p></i>
         </center>
+        {% endfor %}
+    {% endfor %}
+
 
         <center>
-        ©Trigger door Floris Tomassen & Madeleine Kroeze
+            <br>
+            ©Trigger door Floris Tomassen & Madeleine Kroeze
+            </br>
         </center>
 </body>
 {% endblock %}

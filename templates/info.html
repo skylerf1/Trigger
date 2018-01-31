@@ -1,1 +1,39 @@
-HOI
+{% extends "layout.html" %}
+<form method=POST enctype=multipart/form-data action="{{ url_for('info') }}">
+
+
+{% block main %}
+
+    <center>
+        <p>
+            <br><br><br><br><br><br>
+            <b> Hoi triggergebruiker! </b>
+            <br><br>
+            Ben jij ook klaar met al die likes van tegenwoordig?
+            <br>
+            Wij ook!
+            <br>
+            Daarom kun je op Trigger alleen maar "triggen".
+            <br>
+            Maar wat houdt triggen precies in?
+            <br>
+            Je triggt als je getriggerd bent door een upload.
+            <br><br>
+            Op de <b>homepage</b> zie je alle posts van gebruikers van Trigger.
+            <br>
+            Op de <b>followersfeed</b> zie je specifiek de uploads van de gebruikers die je volgt.
+            <br>
+            Bij <b>post</b> en <b>gifpost</b> kun je je eigen foto of GIF uploaden.
+            <br><br>
+
+            Veel plezier met triggen! <i>Get triggered!</i>
+            <br><br>
+            Het triggerteam
+            <br>
+        </style>
+        </p>
+
+    </center>
+
+</body>
+{% endblock %}

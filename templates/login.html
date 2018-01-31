@@ -5,29 +5,37 @@
 {% endblock %}
 
 {% block main %}
-    <center><p>
-        <div class="alert alert-danger">
-        <strong>Welkom!</strong> Je moet eerst inloggen voor je kunt beginnen met Triggen. Heb je nog geen account? Klik dan <a href="{{ url_for('register') }}" class="alert-link">hier</a>!
-        </div>
-        </p>
+  <center>
+    <p>
+      <div class="alert alert-danger">
+      <strong>Welkom!</strong> Je moet eerst inloggen voor je kunt beginnen met Triggen. Heb je nog geen account? Klik dan <a href="{{ url_for('register') }}" class="alert-link">hier</a>!
+      </div>
+    </p>
+  </center>
 
-    </center>
-    <br></br>
-<form action="{{ url_for('login') }}" method="post">
-    <div class="container">
-  <form>
-    <div class="input-group">
-      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-      <input required autocomplete="off" id="username" type="text" autofocus class="form-control" name="username" placeholder="Gebruikersnaam">
-    </div>
-    <div class="input-group">
-      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-      <input id="password" type="password" required class="form-control" name="password" placeholder="Wachtwoord">
-    </div>
-    <br>
-    <div class="form-group">
-    <button class="btn btn-danger" type="submit">Log in</button>
-  </form>
   <br>
+
+  <form action="{{ url_for('login') }}" method="post">
+    <div class="container">
+
+    <form>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+        <input required autocomplete="off" id="username" type="text" autofocus class="form-control" name="username" placeholder="Gebruikersnaam">
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+        <input id="password" type="password" required class="form-control" name="password" placeholder="Wachtwoord">
+      </div>
+
+      <br>
+
+      <div class="form-group">
+      <button class="btn btn-danger" type="submit">Log in</button>
+      </div>
+
+    </form>
+    </div>
   </form>
 {% endblock %}

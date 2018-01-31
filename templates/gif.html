@@ -1,4 +1,3 @@
-
 {% extends "layout.html" %}
 
 {% block main %}
@@ -6,6 +5,5 @@
         <a href="/savegif?url='{{ api_response['data'][gif]['images']['downsized_medium']['url'] }}'">
           <img src="{{ api_response['data'][gif]['images']['downsized_medium']['url'] }}" alt="zoek" style="width:477px;height:450px;border:10">
         </a>
-
     {% endfor %}
 {% endblock %}

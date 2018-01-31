@@ -9,17 +9,15 @@
 <center>
     <div class="alert alert-danger">
         <strong>Upload een GIF! </strong> Wil je liever een foto posten? Klik <a href="{{ url_for('upload') }}" class="alert-link">hier</a>!
-        </div>
+    </div>
+
     <form action="{{ url_for('gifsearch') }}" method="post">
         <fieldset>
-            </div>
-
             <div class="form-group">
                 <input required class="form-control" name="searchgif" placeholder="Zoek naar een gif" type="text"/>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">Zoek</button>
-
             </div>
         </fieldset>
     </form>

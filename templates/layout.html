@@ -2,7 +2,6 @@
 <html lang="en">
 
     <head>
-
         <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->
         <meta charset="utf-8"/>
         <meta content="initial-scale=1, width=device-width" name="viewport"/>
@@ -16,7 +15,6 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <title> Trigger {% block title %}{% endblock %}</title>
-
     </head>
 
     <body>
@@ -27,9 +25,9 @@
                   <a class="navbar-brand" class =href="{{ url_for('homepage') }}" style="font-size: 45px; font-family: monospace; color:crimson"> <u> TRIGGER</u></a>
                 </div>
 
+
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.user_id %}
-
                     <ul class="nav navbar-nav">
                         <li><a href="{{ url_for('homepage') }}"  >Home</a></li>
                         <li><a href="{{ url_for('follower_feed') }}"> Followersfeed </span></a></li>
@@ -37,16 +35,11 @@
                         <li><a href="{{ url_for('gifsearch') }}"> Gifpost </span></a></li>
                     </ul>
 
-
-
-
                     <ul class="nav navbar-nav navbar-right">
-
-                        <li><a href="{{ url_for('change_password') }}"><span style="font-size: 25px" class="glyphicon glyphicon-info-sign "></span></a></li>
                         <li><a href="{{ url_for('change_password') }}"><span style="font-size: 25px" class="glyphicon glyphicon-cog "></span></a></li>
+                        <li><a href="{{ url_for('info') }}"><span style="font-size: 25px" class="glyphicon glyphicon-info-sign "></span></a></li>
                         <li><a href="{{ url_for('profile') }}"><span style="font-size: 25px" class="glyphicon glyphicon-user "></span></a></li>
                         <li><a href="{{ url_for('logout') }}"><span style="font-size: 25px" class="glyphicon glyphicon-log-out "></span></a></li>
-
                     </ul>
 
                 {% else %}
@@ -61,18 +54,9 @@
             </div>
         </nav>
 
-<!--{% if get_flashed_messages() %}-->
-    <!--    <header>-->
-    <!--        <div class="alert alert-info" role="alert">-->
-    <!--            {{ get_flashed_messages() | join(" ") }}-->
-    <!--        </div>-->
-    <!--    </header>-->
-    <!--{% endif %}-->
     <main>
     {% block main %}{% endblock %}
     </main>
 
-    </div>
     </body>
-
 </html>
