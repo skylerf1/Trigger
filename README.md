@@ -4,6 +4,9 @@
 ## Foto van de website
 <img src = "https://i.imgur.com/x39b1GG.png">
 
+## Uitleg over de website
+https://youtu.be/O0qv9VxVmU0
+
 ## Samenvatting
 Op Trigger kun je foto’s en Gifs posten. Je kunt andere gebruikers volgen en hun posts bekijken. Trigger doet in tegenstelling tot veel andere social media sites niet aan likes. Je kunt alleen ‘trigs’ uitdelen en dat doe je als je getriggerd bent door een post. Op de homepagina verschijnen getriggerde foto’s van alle gebruikers. Op de persoonlijke timeline zie je de posts van de gebruikers die je volgt. Je kunt op alle posts reageren met tekst of een GIF. 
 
