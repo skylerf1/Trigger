@@ -1,5 +1,5 @@
 # Trigger
-## Door Floris Tomassen en Madeleine Kroeze
+### Door Floris Tomassen en Madeleine Kroeze
 
 ## Foto van de website
 <img src = "https://i.imgur.com/x39b1GG.png">
